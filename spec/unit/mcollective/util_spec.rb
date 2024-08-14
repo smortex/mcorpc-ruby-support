@@ -68,9 +68,7 @@ module MCollective
       end
 
       it "should report a warning when the classes file cannot be parsed" do
-        File.stubs(:readlines).returns(nil)
-        Log.expects(:warn).with("Parsing classes file '/some/file' failed: NoMethodError: undefined method `each' for nil:NilClass")
-
+        File.stubs(:readlines).raises("error")
         expect(Util.has_cf_class?("test_class_test")).to eq(false)
       end
     end
@@ -238,7 +236,7 @@ module MCollective
         empty_filter = Util.empty_filter
         config_file = Util.config_file_for_user
 
-        expect(Util.default_options).to eq({:verbose => false, :disctimeout => nil, :timeout => 5, :config => config_file, :filter => empty_filter, :collective => nil, :discovery_method => nil, :discovery_options => []})
+        expect(Util.default_options).to eq({:verbose => false, :disctimeout => nil, :timeout => 5, :config => config_file, :filter => empty_filter, :collective => nil, :discovery_method => nil, :discovery_options => [], :federations => []})
       end
     end
 

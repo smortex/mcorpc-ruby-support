@@ -6,6 +6,8 @@ module MCollective
       end
 
       def self.discover(filter, timeout, limit, client)
+        @config = Config.instance
+
         raise("Cannot find the choria binary in your path") unless Util.command_in_path?("choria")
 
         cmd = [binary_name, "discover", "-j", "--silent"]
@@ -36,6 +38,8 @@ module MCollective
 
           cmd << "-S" << c.first["expr"]
         end
+
+        cmd << "--federations" << @config.federations.join(",") unless @config.federations.empty?
 
         client.options.fetch(:discovery_options, []).each do |opt|
           cmd << "--do" << opt
